@@ -1,1 +1,126 @@
-<p>experiments-editor-component works!</p>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <a routerLink="/app/experiments" class="back-link"> ← Experiments </a>
+
+      <h1>
+        @if (isEditMode()) {
+          Edit experiment
+        } @else {
+          Create experiment
+        }
+      </h1>
+
+      <p>Configure the experiment and its traffic allocation.</p>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="state">Loading experiment...</div>
+  } @else {
+    <form class="form-card" [formGroup]="form" (ngSubmit)="save()">
+      <div class="form-field">
+        <label for="name">Name</label>
+
+        <input id="name" type="text" formControlName="name" placeholder="e.g. Checkout Redesign" />
+
+        @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+          <small>Name is required.</small>
+        }
+
+        @if (form.controls.name.touched && form.controls.name.hasError('minlength')) {
+          <small>Name must contain at least 3 characters.</small>
+        }
+      </div>
+
+      <div class="form-field">
+        <label for="description"> Description </label>
+
+        <textarea
+          id="description"
+          rows="4"
+          formControlName="description"
+          placeholder="What are you testing?"
+        ></textarea>
+
+        @if (form.controls.description.touched && form.controls.description.hasError('required')) {
+          <small>Description is required.</small>
+        }
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="status">Status</label>
+
+          <select id="status" formControlName="status">
+            <option value="DRAFT">Draft</option>
+            <option value="RUNNING">Running</option>
+            <option value="COMPLETED">Completed</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="owner">Owner</label>
+
+          <input id="owner" type="text" formControlName="owner" placeholder="Experiment owner" />
+
+          @if (form.controls.owner.touched && form.controls.owner.hasError('required')) {
+            <small>Owner is required.</small>
+          }
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label for="traffic"> Traffic percentage </label>
+
+          <input id="traffic" type="number" formControlName="trafficPercentage" min="1" max="100" />
+
+          @if (
+            form.controls.trafficPercentage.touched &&
+            (form.controls.trafficPercentage.hasError('min') ||
+              form.controls.trafficPercentage.hasError('max'))
+          ) {
+            <small> Traffic must be between 1 and 100%. </small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="startDate"> Start date </label>
+
+          <input id="startDate" type="date" formControlName="startDate" />
+        </div>
+
+        <div class="form-field">
+          <label for="endDate"> End date </label>
+
+          <input id="endDate" type="date" formControlName="endDate" />
+        </div>
+      </div>
+
+      @if (form.hasError('invalidDateRange')) {
+        <div class="validation-error">End date must be after the start date.</div>
+      }
+
+      @if (error(); as message) {
+        <div class="error-message">
+          {{ message }}
+        </div>
+      }
+
+      <div class="actions">
+        <a routerLink="/app/experiments" class="cancel-button"> Cancel </a>
+
+        <button type="submit" [disabled]="saving()">
+          @if (saving()) {
+            Saving...
+          } @else if (isEditMode()) {
+            Save changes
+          } @else {
+            Create experiment
+          }
+        </button>
+      </div>
+    </form>
+  }
+</section>

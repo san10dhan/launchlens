@@ -1,0 +1,80 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Experiments</h1>
+      <p>Create, monitor and manage product experiments.</p>
+    </div>
+
+    <a routerLink="/app/experiments/new" class="primary-button"> + New experiment </a>
+  </header>
+
+  <section class="filters">
+    <div class="search-wrapper">
+      <input
+        type="search"
+        [formControl]="searchControl"
+        placeholder="Search experiments..."
+        aria-label="Search experiments"
+      />
+
+      @if (searchControl.value) {
+        <button type="button" (click)="clearSearch()" aria-label="Clear search">×</button>
+      }
+    </div>
+
+    <select [formControl]="statusControl" aria-label="Filter by status">
+      <option value="ALL">All statuses</option>
+
+      <option value="DRAFT">Draft</option>
+
+      <option value="RUNNING">Running</option>
+
+      <option value="COMPLETED">Completed</option>
+    </select>
+  </section>
+
+  @if (loading()) {
+    <div class="state">Loading experiments...</div>
+  } @else if (error(); as message) {
+    <div class="error-state" role="alert">
+      {{ message }}
+    </div>
+  } @else if (!hasExperiments()) {
+    <div class="empty-state">No experiments match your filters.</div>
+  } @else {
+    <section class="experiment-list">
+      @for (experiment of experiments(); track experiment.id) {
+        <a class="experiment-card" [routerLink]="['/app/experiments', experiment.id]">
+          <div class="experiment-main">
+            <div class="title-row">
+              <h2>
+                {{ experiment.name }}
+              </h2>
+
+              <span
+                class="status"
+                [class.running]="experiment.status === 'RUNNING'"
+                [class.completed]="experiment.status === 'COMPLETED'"
+              >
+                {{ experiment.status }}
+              </span>
+            </div>
+
+            <p>
+              {{ experiment.description }}
+            </p>
+
+            <div class="metadata">
+              <span> Owner: {{ experiment.owner }} </span>
+
+              <!-- <span>
+                Traffic:
+                {{ experiment.trafficPercentage }}%
+              </span> -->
+            </div>
+          </div>
+        </a>
+      }
+    </section>
+  }
+</section>

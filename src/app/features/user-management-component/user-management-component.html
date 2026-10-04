@@ -1,1 +1,119 @@
-<p>user-management-component works!</p>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>User Management</h1>
+      <p>Manage LaunchLens users and their roles.</p>
+    </div>
+  </header>
+
+  @if (error(); as message) {
+    <div class="error-message">
+      {{ message }}
+    </div>
+  }
+
+  <div class="layout">
+    <section class="users-card">
+      <div class="section-header">
+        <h2>Users</h2>
+
+        <span> {{ users().length }} users </span>
+      </div>
+
+      @if (loading()) {
+        <div class="state">Loading users...</div>
+      } @else if (users().length === 0) {
+        <div class="state">No users found.</div>
+      } @else {
+        <div class="user-list">
+          @for (user of users(); track user.id) {
+            <article class="user-row">
+              <div class="avatar">
+                {{ user.name.charAt(0).toUpperCase() }}
+              </div>
+
+              <div class="user-info">
+                <strong>{{ user.name }}</strong>
+                <span>{{ user.email }}</span>
+              </div>
+
+              <span
+                class="role"
+                [class.admin]="user.role === 'admin'"
+                [class.manager]="user.role === 'manager'"
+              >
+                {{ user.role }}
+              </span>
+
+              <div class="actions">
+                <button type="button" (click)="editUser(user)">Edit</button>
+
+                <button type="button" class="danger" (click)="deleteUser(user)">Delete</button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="form-card">
+      <h2>
+        @if (editingUserId()) {
+          Edit user
+        } @else {
+          Add user
+        }
+      </h2>
+
+      <form [formGroup]="form" (ngSubmit)="saveUser()">
+        <div class="form-field">
+          <label for="name">Name</label>
+
+          <input id="name" type="text" formControlName="name" placeholder="User name" />
+
+          @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+            <small>Name is required.</small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="email">Email</label>
+
+          <input id="email" type="email" formControlName="email" placeholder="user@example.com" />
+
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <small>Enter a valid email.</small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="role">Role</label>
+
+          <select id="role" formControlName="role">
+            <option value="analyst">Analyst</option>
+
+            <option value="manager">Manager</option>
+
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          @if (editingUserId()) {
+            <button type="button" class="secondary" (click)="resetForm()">Cancel</button>
+          }
+
+          <button type="submit" [disabled]="saving()">
+            @if (saving()) {
+              Saving...
+            } @else if (editingUserId()) {
+              Save changes
+            } @else {
+              Add user
+            }
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</section>

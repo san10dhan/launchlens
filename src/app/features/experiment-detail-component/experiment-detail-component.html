@@ -1,0 +1,75 @@
+<section class="page">
+  @if (loading()) {
+    <div class="state">Loading experiment...</div>
+  } @else if (error(); as message) {
+    <div class="error-state">
+      {{ message }}
+
+      <a routerLink="/app/experiments"> Back to experiments </a>
+    </div>
+  } @else if (experiment(); as experiment) {
+    <header class="page-header">
+      <div>
+        <a routerLink="/app/experiments" class="back-link"> ← Experiments </a>
+
+        <h1>{{ experiment.name }}</h1>
+
+        <p>{{ experiment.description }}</p>
+      </div>
+
+      <a class="edit-button" [routerLink]="['/app/experiments', experiment.id, 'edit']">
+        Edit experiment
+      </a>
+    </header>
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <span>Status</span>
+        <strong>{{ experiment.status }}</strong>
+      </article>
+
+      <article class="summary-card">
+        <span>Owner</span>
+        <strong>{{ experiment.owner }}</strong>
+      </article>
+
+      <!-- <article class="summary-card">
+        <span>Traffic</span>
+        <strong> {{ experiment.trafficPercentage }}% </strong>
+      </article> -->
+
+      <article class="summary-card">
+        <span>Start date</span>
+        <strong>
+          {{ experiment.startDate || 'Not started' }}
+        </strong>
+      </article>
+    </section>
+
+    <section class="details-card">
+      <h2>Experiment details</h2>
+
+      <dl>
+        <div>
+          <dt>Experiment ID</dt>
+          <dd>{{ experiment.id }}</dd>
+        </div>
+
+        <div>
+          <dt>Description</dt>
+          <dd>{{ experiment.description }}</dd>
+        </div>
+
+        <div>
+          <dt>Start date</dt>
+          <dd>{{ experiment.startDate || '-' }}</dd>
+        </div>
+
+        <div>
+          <dt>End date</dt>
+          <dd>{{ experiment.endDate || '-' }}</dd>
+        </div>
+      </dl>
+    </section>
+  }
+</section>

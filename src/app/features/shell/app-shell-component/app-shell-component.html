@@ -1,1 +1,37 @@
-<p>app-shell-component works!</p>
+<div class="app-shell">
+  <header class="topbar">
+    <a routerLink="/app/dashboard" class="brand"> 🚀 LaunchLens </a>
+
+    <input type="search" placeholder="Search experiments..." aria-label="Search experiments" />
+
+    <div class="user-area">
+      <div class="user-info">
+        <strong>{{ user()?.name }}</strong>
+        <span>{{ user()?.role }}</span>
+      </div>
+
+      <button type="button" class="user-menu" (click)="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="body">
+    <aside class="sidebar">
+      <nav aria-label="Main navigation">
+        @for (item of navigation; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <span>{{ item.icon }}</span>
+            {{ item.label }}
+          </a>
+        }
+      </nav>
+    </aside>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

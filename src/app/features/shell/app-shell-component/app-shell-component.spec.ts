@@ -19,4 +19,21 @@ describe('AppShellComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('renders application navigation', async () => {
+    await TestBed.configureTestingModule({
+      imports: [AppShellComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(AppShellComponent);
+
+    fixture.detectChanges();
+
+    const links = fixture.nativeElement.querySelectorAll('a');
+
+    expect(Array.from(links).some((link: any) => link.textContent.trim() === 'Experiments')).toBe(
+      true,
+    );
+
+    expect(Array.from(links).some((link: any) => link.textContent.trim() === 'Users')).toBe(true);
+  });
 });

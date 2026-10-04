@@ -47,4 +47,65 @@ describe('Authservice', () => {
   it('should report unauthenticated when token does not exist', () => {
     expect(service.isLoggedIn()).toBe(false);
   });
+  it('should reject login when credentials are invalid', async () => {
+    const credentials = {
+      email: 'wrong@example.com',
+      password: 'wrong-password',
+    };
+
+    const loginPromise = service.login(credentials);
+
+    const request = httpMock.expectOne({
+      method: 'POST',
+      url: '/api/auth/login',
+    });
+
+    request.flush(
+      {
+        message: 'Invalid credentials',
+      },
+      {
+        status: 401,
+        statusText: 'Unauthorized',
+      },
+    );
+
+    await expect(loginPromise).rejects.toBeDefined();
+
+    expect(service.isLoggedIn()).toBe(false);
+
+    expect(service.getAccessToken()).toBeNull();
+  });
+  it('should clear authentication state on logout', async () => {
+    const response = {
+      accessToken: 'access-token-123',
+      user: {
+        id: 'u-101',
+        name: 'Alex',
+        permissions: ['experiments.view'],
+      },
+    };
+
+    const loginPromise = service.login({
+      email: 'admin@launchlens.com',
+      password: 'Password123!',
+    });
+
+    const request = httpMock.expectOne({
+      method: 'POST',
+      url: '/api/auth/login',
+    });
+
+    request.flush(response);
+
+    await loginPromise;
+
+    expect(service.isLoggedIn()).toBe(true);
+
+    service.logout();
+
+    expect(service.isLoggedIn()).toBe(false);
+    expect(service.getAccessToken()).toBeNull();
+    expect(service.can('experiment.read')).toBe(false);
+  });
 });

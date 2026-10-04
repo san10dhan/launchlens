@@ -1,0 +1,153 @@
+:host {
+  display: block;
+}
+
+.page {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: #0f172a;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.primary-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.search-wrapper input,
+.filters select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  font: inherit;
+}
+
+.search-wrapper button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  color: #64748b;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.filters select {
+  width: 180px;
+}
+
+.experiment-list {
+  display: grid;
+  gap: 12px;
+}
+
+.experiment-card {
+  display: block;
+  padding: 20px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.experiment-card:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 6%);
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-row h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.experiment-card p {
+  margin: 8px 0 16px;
+  color: #64748b;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.status.running {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.status.completed {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.metadata {
+  display: flex;
+  gap: 20px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.state,
+.empty-state,
+.error-state {
+  padding: 50px;
+  text-align: center;
+}
+
+.state,
+.empty-state {
+  color: #64748b;
+}
+
+.error-state {
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+}

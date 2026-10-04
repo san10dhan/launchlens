@@ -1,0 +1,76 @@
+<section class="dashboard">
+  <header class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p>Monitor your product experiments at a glance.</p>
+    </div>
+
+    <a routerLink="/app/experiments/new" class="primary-button"> + New experiment </a>
+  </header>
+
+  @if (loading()) {
+    <div class="state">Loading dashboard...</div>
+  } @else if (error(); as message) {
+    <div class="error-state">
+      {{ message }}
+    </div>
+  } @else {
+    <section class="metrics">
+      <article class="metric-card">
+        <span>Total experiments</span>
+        <strong>{{ totalExperiments() }}</strong>
+      </article>
+
+      <article class="metric-card running">
+        <span>Running</span>
+        <strong>{{ runningExperiments() }}</strong>
+      </article>
+
+      <article class="metric-card draft">
+        <span>Drafts</span>
+        <strong>{{ draftExperiments() }}</strong>
+      </article>
+
+      <article class="metric-card completed">
+        <span>Completed</span>
+        <strong>{{ completedExperiments() }}</strong>
+      </article>
+    </section>
+
+    <section class="recent-section">
+      <div class="section-header">
+        <div>
+          <h2>Recent experiments</h2>
+          <p>Your latest product experiments.</p>
+        </div>
+
+        <a routerLink="/app/experiments"> View all </a>
+      </div>
+
+      @if (experiments().length === 0) {
+        <div class="empty-state">No experiments have been created yet.</div>
+      } @else {
+        <div class="experiment-list">
+          @for (experiment of experiments().slice(0, 5); track experiment.id) {
+            <a class="experiment-row" [routerLink]="['/app/experiments', experiment.id]">
+              <div>
+                <strong>{{ experiment.name }}</strong>
+                <span>{{ experiment.owner }}</span>
+              </div>
+
+              <span
+                class="status"
+                [class.running]="experiment.status === 'RUNNING'"
+                [class.completed]="experiment.status === 'COMPLETED'"
+              >
+                {{ experiment.status }}
+              </span>
+
+              <!-- <span> {{ experiment.trafficPercentage }}% traffic </span> -->
+            </a>
+          }
+        </div>
+      }
+    </section>
+  }
+</section>
